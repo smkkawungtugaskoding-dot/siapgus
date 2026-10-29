@@ -1,0 +1,8 @@
+{
+  "name": "SiApgus - Sistem Aplikasi Guru Sekolah",
+  "description": "Sistem Aplikasi Guru Sekolah Online",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
