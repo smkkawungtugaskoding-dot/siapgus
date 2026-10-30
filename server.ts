@@ -125,7 +125,7 @@ app.post('/api/database/reset', (_req, res) => {
 });
 
 // 5. Download / View Google Apps Script files
-app.get('/api/code-gs', (_req, res) => {
+app.get(['/Code.gs', '/api/code-gs'], (_req, res) => {
   const filePath = path.join(__dirname, 'Code.gs');
   if (fs.existsSync(filePath)) {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -135,7 +135,7 @@ app.get('/api/code-gs', (_req, res) => {
   }
 });
 
-app.get('/api/index-html', (_req, res) => {
+app.get(['/Index.html', '/api/index-html'], (_req, res) => {
   const filePath = path.join(__dirname, 'Index.html');
   if (fs.existsSync(filePath)) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');

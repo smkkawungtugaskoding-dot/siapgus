@@ -61,7 +61,9 @@ export function formatDbForSpreadsheet(db: AppDatabase): FormattedSpreadsheetDat
       'Kode Pos': db.profile.kodePos,
       'Alamat': db.profile.alamatSekolah,
       'Telepon': db.profile.telp,
+      'Logo URL': db.profile.logoUrl || '',
       'Logo URL/Base64': db.profile.logoUrl || '',
+      'Logo': db.profile.logoUrl || '',
       namaSekolah: db.profile.namaSekolah,
       kepalaSekolah: db.profile.kepalaSekolah,
       nuptk: db.profile.nuptk,
@@ -315,7 +317,7 @@ export async function syncPullFromSpreadsheet(url: string): Promise<Partial<AppD
       kodePos: String(d.profil['Kode Pos'] || d.profil.kodePos || ''),
       alamatSekolah: d.profil['Alamat'] || d.profil.alamatSekolah || '',
       telp: String(d.profil['Telepon'] || d.profil.telp || ''),
-      logoUrl: d.profil['Logo URL/Base64'] || d.profil.logoUrl || '',
+      logoUrl: d.profil['Logo URL'] || d.profil['Logo URL/Base64'] || d.profil['Logo'] || d.profil.logoUrl || '',
     };
   }
 
@@ -499,7 +501,7 @@ export async function importDatabaseFromWorkbook(file: File): Promise<Partial<Ap
               kodePos: String(p['Kode Pos'] || p.kodePos || ''),
               alamatSekolah: p['Alamat'] || p.alamatSekolah || '',
               telp: String(p['Telepon'] || p.telp || ''),
-              logoUrl: p['Logo URL/Base64'] || p.logoUrl || '',
+              logoUrl: p['Logo URL'] || p['Logo URL/Base64'] || p['Logo'] || p.logoUrl || '',
             };
           }
         }

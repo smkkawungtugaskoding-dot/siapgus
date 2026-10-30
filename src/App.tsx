@@ -41,6 +41,9 @@ import { GuruRaporPenilaian } from './components/guru/GuruRaporPenilaian';
 import { GuruMenuAbsensi } from './components/guru/GuruMenuAbsensi';
 import { GuruMenuCetakAbsen } from './components/guru/GuruMenuCetakAbsen';
 import { GuruMenuCetakRapor } from './components/guru/GuruMenuCetakRapor';
+import { findWaliAssignment } from './utils/waliKelas';
+import { updateAppFavicon } from './utils/favicon';
+import { ShieldAlert } from 'lucide-react';
 
 export default function App() {
   // Database State
@@ -91,6 +94,11 @@ export default function App() {
       clearInterval(pollInterval);
     };
   }, []);
+
+  // Real-time Dynamic Favicon: automatically updates browser tab icon whenever school logo is uploaded/saved
+  useEffect(() => {
+    updateAppFavicon(db.profile.logoUrl);
+  }, [db.profile.logoUrl]);
 
   // Sync state changes to localStorage and permanently to server so it never resets across devices
   const updateDb = (newDb: AppDatabase, skipAutoSync: boolean = false) => {
@@ -675,10 +683,37 @@ export default function App() {
           )}
 
           {activeMenu === 'guru-cetak-rapor' && (
-            <GuruMenuCetakRapor
-              currentUser={currentUser}
-              db={db}
-            />
+            (() => {
+              const assignedWali = findWaliAssignment(currentUser, db.waliKelas);
+              if (currentUser.role !== 'admin' && !assignedWali) {
+                return (
+                  <div className="bg-white rounded-2xl border border-amber-200 p-8 text-center max-w-xl mx-auto space-y-4 shadow-sm my-8">
+                    <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
+                      <ShieldAlert className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-bold text-slate-800">Akses Khusus Wali Kelas</h2>
+                      <p className="text-xs text-slate-500 mt-1">
+                        Menu Cetak Rapor Siswa hanya dapat diakses oleh Wali Kelas yang ditunjuk dan terdaftar pada Menu Wali Kelas oleh Administrator. Anda saat ini login sebagai Guru Mata Pelajaran.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setActiveMenu('guru-dashboard')}
+                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                    >
+                      Kembali ke Dashboard Guru
+                    </button>
+                  </div>
+                );
+              }
+              return (
+                <GuruMenuCetakRapor
+                  currentUser={currentUser}
+                  db={db}
+                />
+              );
+            })()
           )}
         </main>
       </div>

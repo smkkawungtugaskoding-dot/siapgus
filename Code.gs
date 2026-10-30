@@ -1,41 +1,68 @@
 /**
  * ============================================================================
  * SISTEM APLIKASI GURU SEKOLAH (SiApgus)
- * Google Apps Script Backend (Code.gs)
+ * Backend Lengkap Google Apps Script (Code.gs)
  * ============================================================================
- * Script ini berfungsi ganda:
- * 1. Web App Server: Menampilkan antarmuka aplikasi SiApgus (Index.html) langsung
- *    di browser tanpa perlu hosting atau server eksternal (100% GRATIS).
- * 2. Database Server: Mengelola pembacaan dan penyimpanan 9 tabel database
- *    sekolah langsung di Google Spreadsheet.
  *
- * CARA PEMASANGAN DI GOOGLE SPREADSHEET:
+ * File ini merupakan backend lengkap untuk menghubungkan aplikasi SiApgus
+ * dengan Google Spreadsheet secara real-time dan 100% GRATIS.
+ *
+ * FUNGSI UTAMA SCRIPT:
+ * 1. Web App Server (doGet):
+ *    - Menyajikan antarmuka aplikasi SiApgus (Index.html) langsung di browser
+ *      desktop maupun smartphone (HP) tanpa perlu sewa hosting / domain.
+ * 2. Database Server (doPost & google.script.run):
+ *    - Mengelola 9 tabel database sekolah di Google Spreadsheet:
+ *      1. DB_Pengguna (Akun Login Admin & Guru)
+ *      2. DB_ProfilSekolah (Profil, Logo, Kepala Sekolah, NUPTK)
+ *      3. DB_Siswa (Biodata Peserta Didik)
+ *      4. DB_Guru (Data Dewan Guru & NUPTK)
+ *      5. DB_MataPelajaran (Penugasan Guru Mapel)
+ *      6. DB_WaliKelas (Penugasan Resmi Wali Kelas)
+ *      7. DB_JurnalPembelajaran (Jurnal Agenda Mengajar Harian)
+ *      8. DB_Penilaian (Nilai Sumatif, STS, SAS, Sisipan, Akhir & Capaian)
+ *      9. DB_Absensi (Presensi Harian Siswa Hadir, Sakit, Izin, Alpa)
+ *
+ * PANDUAN LENGKAP CARA PEMASANGAN DI GOOGLE SPREADSHEET:
  * ----------------------------------------------------------------------------
- * 1. Buka Google Drive (drive.google.com) dan buat Spreadsheet baru.
- *    Beri nama Spreadsheet: "Database SiApgus".
- * 2. Di menu atas Spreadsheet, klik: "Ekstensi" (Extensions) > "Apps Script".
- * 3. Hapus seluruh kode bawaan di file "Code.gs", lalu SALIN & TEMPEL kode ini.
- * 4. Tambahkan file HTML baru di Apps Script:
- *    - Klik ikon (+) di samping "File" > Pilih "HTML".
- *    - Beri nama persis: Index (tanpa .html).
- *    - Salin dan tempelkan seluruh isi file Index.html ke dalamnya.
- * 5. Jalankan fungsi "setupDatabase()" satu kali:
- *    - Di toolbar atas, pilih fungsi "setupDatabase".
- *    - Klik tombol "Jalankan" (Run).
- *    - Izinkan akses / permission saat diminta oleh Google.
- * 6. Terapkan sebagai Aplikasi Web (Web App):
- *    - Klik tombol biru "Terapkan" (Deploy) di kanan atas > "Penerapan baru" (New deployment).
- *    - Klik ikon roda gigi > Pilih "Aplikasi web" (Web app).
- *    - Deskripsi: SiApgus Versi 1.0
- *    - Jalankan sebagai: "Saya" (Me)
- *    - Yang memiliki akses: "Siapa saja" (Anyone) -> PENTING!
- *    - Klik "Terapkan" (Deploy).
- * 7. Salin "URL Aplikasi Web" yang diberikan. Anda dapat membuka URL tersebut
- *    di laptop atau HP mana saja untuk menggunakan SiApgus!
+ * 1. Buka Google Drive (https://drive.google.com) lalu buat Spreadsheet baru.
+ *    Beri judul Spreadsheet: "Database SiApgus".
+ * 2. Di menu atas Spreadsheet, klik menu:
+ *    "Ekstensi" (Extensions) > "Apps Script".
+ * 3. Hapus seluruh isi kode bawaan pada editor "Code.gs", lalu SALIN dan
+ *    TEMPEL SELURUH ISI KODE INI ke dalam file Code.gs tersebut.
+ * 4. Tambahkan file antarmuka "Index.html":
+ *    - Di panel kiri Apps Script, klik tombol (+) di samping tulisan "File".
+ *    - Pilih opsi "HTML".
+ *    - Beri nama persis: Index (jangan ketik .html karena Google otomatis menambahkannya).
+ *    - Buka file Index.html dari aplikasi SiApgus, salin seluruh isinya, lalu
+ *      tempelkan ke dalam file Index di Apps Script.
+ * 5. Jalankan fungsi "setupDatabase" satu kali:
+ *    - Di baris toolbar atas editor Apps Script, pilih dropdown fungsi: "setupDatabase".
+ *    - Klik tombol "Jalankan" (Run / ikon segitiga).
+ *    - Jika muncul permintaan izin ("Authorization Required"), klik "Tinjau Izin"
+ *      (Review Permissions) > pilih akun Google Anda > klik "Lanjutan" (Advanced) >
+ *      klik "Buka Database SiApgus (tidak aman)" > klik "Izinkan" (Allow).
+ *    - Tunggu beberapa detik hingga 9 Sheet database otomatis terbuat dengan
+ *      rapi, lengkap dengan header biru resmi dan data percontohan.
+ * 6. Terapkan sebagai Aplikasi Web (Deploy as Web App):
+ *    - Di sudut kanan atas editor Apps Script, klik tombol biru "Terapkan" (Deploy)
+ *      lalu pilih "Penerapan baru" (New deployment).
+ *    - Klik ikon roda gigi (gear) di sebelah kiri > pilih "Aplikasi web" (Web app).
+ *    - Konfigurasikan:
+ *      * Deskripsi: SiApgus Versi Lengkap 1.0
+ *      * Jalankan sebagai (Execute as): "Saya" (Me - email akun Google Anda)
+ *      * Yang memiliki akses (Who has access): "Siapa saja" (Anyone) -> SANGAT PENTING!
+ *    - Klik tombol "Terapkan" (Deploy).
+ * 7. Selesai!
+ *    - Salin "URL Aplikasi Web" yang muncul.
+ *    - Buka URL tersebut di browser untuk mengakses aplikasi SiApgus secara online.
+ *    - Anda juga dapat menempelkan URL tersebut pada menu "Setting Profil Sekolah"
+ *      atau "Sinkronisasi Spreadsheet" di SiApgus untuk mengaktifkan sinkronisasi otomatis.
  * ============================================================================
  */
 
-// Daftar nama sheet database sekolah
+// Konstanta Nama Sheet Database
 const SHEET_NAMES = {
   USERS: 'DB_Pengguna',
   PROFIL: 'DB_ProfilSekolah',
@@ -50,15 +77,16 @@ const SHEET_NAMES = {
 
 /**
  * Handle HTTP GET Request
- * Saat URL dibuka di browser, fungsi ini otomatis menyajikan Index.html
+ * Saat URL Web App dibuka di browser, fungsi ini menyajikan Index.html
+ * atau melayani endpoint REST API jika menyertakan parameter action.
  */
 function doGet(e) {
-  // Jika parameter query meminta JSON (misal ?action=getAllData)
+  // Jika parameter action ada dan bukan 'html', layani sebagai REST API JSON
   if (e && e.parameter && e.parameter.action && e.parameter.action !== 'html') {
     return handleApiGet(e);
   }
 
-  // Tampilkan antarmuka Web App SiApgus
+  // Tampilkan antarmuka Web App SiApgus (Index.html)
   try {
     return HtmlService.createHtmlOutputFromFile('Index')
       .setTitle('SiApgus - Sistem Aplikasi Guru Sekolah')
@@ -66,35 +94,57 @@ function doGet(e) {
       .addMetaTag('viewport', 'width=device-width, initial-scale=1, maximum-scale=1');
   } catch (err) {
     return ContentService.createTextOutput(
-      'SiApgus Web App Backend Aktif.\n' +
-      'Catatan: Pastikan Anda telah membuat file HTML bernama "Index" di Apps Script.\n' +
-      'Error: ' + err.toString()
+      'SiApgus Google Apps Script Backend Online.\n\n' +
+      'Pemberitahuan:\n' +
+      'Pastikan Anda telah membuat file HTML bernama "Index" di Apps Script dan menempelkan isi Index.html ke dalamnya.\n\n' +
+      'Detail Pesan: ' + err.toString()
     ).setMimeType(ContentService.MimeType.TEXT);
   }
 }
 
 /**
- * Handle API GET Request
+ * Handle REST API GET Request
  */
 function handleApiGet(e) {
   const action = e.parameter.action;
   const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  if (action === 'getAllData') {
+  // 1. Ambil seluruh data database
+  if (action === 'getAllData' || action === 'getDatabase') {
     return respondJSON({
       status: 'success',
       timestamp: new Date().toISOString(),
+      spreadsheetId: ss.getId(),
+      spreadsheetName: ss.getName(),
       data: fetchAllSheetsData(ss)
     });
   }
 
+  // 2. Ambil data sheet tertentu
   if (action === 'getSheet') {
     const sheetKey = e.parameter.sheet;
     const sheetName = SHEET_NAMES[sheetKey] || sheetKey;
     const data = getSheetData(ss, sheetName);
-    return respondJSON({ status: 'success', sheet: sheetName, count: data.length, data: data });
+    return respondJSON({
+      status: 'success',
+      sheet: sheetName,
+      count: data.length,
+      data: data
+    });
   }
 
+  // 3. Tes Ping / Koneksi
+  if (action === 'ping') {
+    return respondJSON({
+      status: 'online',
+      app: 'SiApgus - Sistem Aplikasi Guru Sekolah',
+      version: '1.0.0',
+      spreadsheetName: ss.getName(),
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  // Default response
   return respondJSON({
     status: 'online',
     app: 'SiApgus - Sistem Aplikasi Guru Sekolah',
@@ -104,7 +154,8 @@ function handleApiGet(e) {
 }
 
 /**
- * Handle HTTP POST Request (REST API endpoint untuk simpan data dari luar)
+ * Handle HTTP POST Request
+ * Menerima payload JSON dari aplikasi SiApgus untuk disimpan ke Spreadsheet
  */
 function doPost(e) {
   try {
@@ -116,6 +167,7 @@ function doPost(e) {
     const action = postData.action || 'syncAll';
     const ss = SpreadsheetApp.getActiveSpreadsheet();
 
+    // 1. Simpan Seluruh Database Sekaligus
     if (action === 'syncAll' || action === 'saveAll') {
       const payload = postData.payload || postData.data || {};
       savePayloadToSheets(ss, payload);
@@ -124,6 +176,31 @@ function doPost(e) {
         message: 'Seluruh database SiApgus berhasil disimpan ke Google Spreadsheet!',
         timestamp: new Date().toISOString()
       });
+    }
+
+    // 2. Simpan Parsial: Profil Sekolah
+    if (action === 'saveProfile') {
+      if (postData.profile) {
+        ensureProfileLogoColumn(ss);
+        replaceSheetData(ss, SHEET_NAMES.PROFIL, [postData.profile]);
+      }
+      return respondJSON({ status: 'success', message: 'Profil sekolah berhasil disimpan.' });
+    }
+
+    // 3. Simpan Parsial: Penilaian Rapor Batch
+    if (action === 'savePenilaianBatch') {
+      if (postData.penilaian && Array.isArray(postData.penilaian)) {
+        replaceSheetData(ss, SHEET_NAMES.PENILAIAN, postData.penilaian);
+      }
+      return respondJSON({ status: 'success', message: 'Data penilaian rapor berhasil disimpan.' });
+    }
+
+    // 4. Simpan Parsial: Absensi Batch
+    if (action === 'saveAbsensiBatch') {
+      if (postData.absensi && Array.isArray(postData.absensi)) {
+        replaceSheetData(ss, SHEET_NAMES.ABSENSI, postData.absensi);
+      }
+      return respondJSON({ status: 'success', message: 'Data absensi presensi berhasil disimpan.' });
     }
 
     return respondJSON({ status: 'error', message: 'Action tidak dikenali: ' + action });
@@ -138,12 +215,12 @@ function doPost(e) {
 // ============================================================================
 
 /**
- * Mengambil seluruh database sekolah langsung ke Index.html
+ * Mengambil seluruh database sekolah langsung ke Index.html via google.script.run
  */
 function apiGetDatabase() {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    // Jika sheet belum ada, inisialisasi dulu
+    // Jika sheet profil belum ada, inisialisasi otomatis
     if (!ss.getSheetByName(SHEET_NAMES.PROFIL)) {
       setupDatabase();
     }
@@ -182,7 +259,7 @@ function apiSaveDatabase(payloadOrJsonString) {
 }
 
 /**
- * Mengembalikan informasi spreadsheet aktif
+ * Mengembalikan informasi spreadsheet aktif dan user yang sedang login
  */
 function apiGetSystemInfo() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -199,13 +276,29 @@ function apiGetSystemInfo() {
 // ============================================================================
 
 /**
- * Membaca seluruh sheet menjadi struktur objek lengkap
+ * Membaca seluruh 9 sheet menjadi struktur data objek terpadu
  */
 function fetchAllSheetsData(ss) {
   const profilRows = getSheetData(ss, SHEET_NAMES.PROFIL);
+  let profilObj = profilRows.length > 0 ? profilRows[0] : null;
+
+  // Normalisasi kolom profil dan logo sekolah agar konsisten
+  if (profilObj) {
+    profilObj.logoUrl = profilObj['Logo URL'] || profilObj['Logo URL/Base64'] || profilObj['Logo'] || profilObj['Logo Sekolah'] || profilObj.logoUrl || '';
+    profilObj.namaSekolah = profilObj['Nama Sekolah'] || profilObj.namaSekolah || '';
+    profilObj.kepalaSekolah = profilObj['Kepala Sekolah'] || profilObj.kepalaSekolah || '';
+    profilObj.nuptk = String(profilObj['NUPTK'] || profilObj.nuptk || '');
+    profilObj.npsn = String(profilObj['NPSN'] || profilObj.npsn || '');
+    profilObj.akreditasi = profilObj['Akreditasi'] || profilObj.akreditasi || 'A';
+    profilObj.kurikulum = profilObj['Kurikulum'] || profilObj.kurikulum || 'Kurikulum Merdeka';
+    profilObj.kodePos = String(profilObj['Kode Pos'] || profilObj.kodePos || '');
+    profilObj.alamatSekolah = profilObj['Alamat'] || profilObj['Alamat Sekolah'] || profilObj.alamatSekolah || '';
+    profilObj.telp = String(profilObj['Telepon'] || profilObj.telp || '');
+  }
+
   return {
     users: getSheetData(ss, SHEET_NAMES.USERS),
-    profil: profilRows.length > 0 ? profilRows[0] : null,
+    profil: profilObj,
     siswa: getSheetData(ss, SHEET_NAMES.SISWA),
     guru: getSheetData(ss, SHEET_NAMES.GURU),
     mapel: getSheetData(ss, SHEET_NAMES.MAPEL),
@@ -217,10 +310,11 @@ function fetchAllSheetsData(ss) {
 }
 
 /**
- * Menyimpan seluruh dataset ke sheet masing-masing
+ * Menyimpan seluruh dataset ke sheet masing-masing secara aman
  */
 function savePayloadToSheets(ss, payload) {
   if (payload.profil) {
+    ensureProfileLogoColumn(ss);
     const profilArr = Array.isArray(payload.profil) ? payload.profil : [payload.profil];
     replaceSheetData(ss, SHEET_NAMES.PROFIL, profilArr);
   }
@@ -235,7 +329,31 @@ function savePayloadToSheets(ss, payload) {
 }
 
 /**
- * Helper untuk membaca isi sheet menjadi array of object
+ * Memastikan kolom "Logo URL" selalu ada pada sheet DB_ProfilSekolah
+ */
+function ensureProfileLogoColumn(ss) {
+  let sheet = ss.getSheetByName(SHEET_NAMES.PROFIL);
+  if (!sheet) return;
+  if (sheet.getLastRow() === 0) return;
+
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn() || 1).getValues()[0];
+  const hasLogo = headers.some(function(h) {
+    const s = h.toString().toLowerCase();
+    return s.indexOf('logo') !== -1;
+  });
+
+  if (!hasLogo) {
+    const nextCol = headers.length + 1;
+    sheet.getRange(1, nextCol).setValue('Logo URL')
+      .setBackground('#1E40AF')
+      .setFontColor('#FFFFFF')
+      .setFontWeight('bold')
+      .setHorizontalAlignment('center');
+  }
+}
+
+/**
+ * Helper untuk membaca isi sheet menjadi array of object JSON
  */
 function getSheetData(ss, sheetName) {
   const sheet = ss.getSheetByName(sheetName);
@@ -267,7 +385,7 @@ function replaceSheetData(ss, sheetName, dataArray) {
     sheet = ss.insertSheet(sheetName);
   }
 
-  // Jika sheet belum punya header, buat header dari keys item pertama
+  // Jika sheet belum memiliki baris header, generate dari properti objek pertama
   if (sheet.getLastRow() === 0) {
     const firstItem = dataArray[0] || {};
     const keys = Object.keys(firstItem);
@@ -275,6 +393,8 @@ function replaceSheetData(ss, sheetName, dataArray) {
   }
 
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn() || 1).getValues()[0];
+
+  // Hapus baris data lama (baris 2 ke bawah), pertahankan baris 1 (header)
   if (sheet.getLastRow() > 1) {
     sheet.deleteRows(2, sheet.getLastRow() - 1);
   }
@@ -284,7 +404,7 @@ function replaceSheetData(ss, sheetName, dataArray) {
       const h = header.toString().trim();
       if (item[h] !== undefined && item[h] !== null) return item[h];
 
-      // Mapping cerdas camelCase <-> Nama Kolom Header
+      // Mapping cerdas camelCase <-> Nama Kolom Header Resmi
       switch (h) {
         case 'ID':
         case 'ID Siswa':
@@ -385,6 +505,18 @@ function replaceSheetData(ss, sheetName, dataArray) {
         case 'Telepon':
           return item.telp || item.telepon || '';
 
+        case 'Logo URL':
+        case 'Logo URL/Base64':
+        case 'Logo':
+        case 'Logo Sekolah': {
+          var logoVal = item.logoUrl || item['Logo URL'] || item['Logo URL/Base64'] || item['Logo'] || item['Logo Sekolah'] || item.logo || '';
+          // Proteksi batas sel Google Spreadsheet (50.000 karakter)
+          if (typeof logoVal === 'string' && logoVal.length > 49000) {
+            logoVal = logoVal.substring(0, 49000);
+          }
+          return logoVal;
+        }
+
         default:
           return item[h] !== undefined ? item[h] : '';
       }
@@ -398,6 +530,7 @@ function replaceSheetData(ss, sheetName, dataArray) {
 
 /**
  * Inisialisasi struktur sheet dan data standar saat pertama kali dipasang
+ * Jalankan fungsi ini satu kali di Apps Script untuk membuat 9 sheet database
  */
 function setupDatabase() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -495,6 +628,8 @@ function setupDatabase() {
     ['ABS-001', '2026-10-27', '7', 'A', 'SIS-001', 'Aditya Pratama Putra', 'S', 'Surat dokter', 'Siti Aminah, M.Pd.']
   ]);
 
+  ensureProfileLogoColumn(ss);
+
   Logger.log('Inisialisasi 9 Sheet Database SiApgus Berhasil!');
   return { status: 'success', message: 'Semua 9 sheet database SiApgus siap digunakan!' };
 }
@@ -524,6 +659,9 @@ function createSheetIfNotExists(ss, name, headers, defaultRows) {
   return sheet;
 }
 
+/**
+ * Helper untuk merespons output JSON
+ */
 function respondJSON(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);

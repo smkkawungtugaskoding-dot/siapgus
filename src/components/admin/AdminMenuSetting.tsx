@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SchoolProfile } from '../../types';
+import { optimizeLogoImage } from '../../utils/imageOptimizer';
+import { updateAppFavicon } from '../../utils/favicon';
 import {
   Settings,
   Upload,
@@ -120,34 +122,39 @@ export const AdminMenuSetting: React.FC<AdminMenuSettingProps> = ({
     }
   };
 
-  // Handle Logo Upload (JPEG, JPG, PNG) with immediate save
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle Logo Upload (JPEG, JPG, PNG) with automatic optimization for Google Spreadsheet
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       setErrorMessage('Format file tidak didukung! Mohon gunakan format JPEG, JPG, atau PNG.');
       setTimeout(() => setErrorMessage(''), 4000);
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (uploadEvent) => {
-      const base64Url = uploadEvent.target?.result as string;
-      handleFieldChange('logoUrl', base64Url);
+    try {
+      setStatusMessage('Mengoptimasi ukuran logo untuk Google Spreadsheet...');
+      // Kompres dan ubah ukuran logo agar pas dengan batas sel Google Spreadsheet (< 50.000 karakter)
+      const optimizedBase64 = await optimizeLogoImage(file, 160, 160);
+      handleFieldChange('logoUrl', optimizedBase64);
+      updateAppFavicon(optimizedBase64);
       setShowToast(true);
-      setStatusMessage('Logo baru berhasil dimuat dan langsung tersimpan secara otomatis!');
+      setStatusMessage('Logo baru berhasil dimuat, favicon tab browser telah diperbarui, dan logo siap tersimpan!');
       setTimeout(() => setStatusMessage(''), 4000);
-    };
-    reader.readAsDataURL(file);
+    } catch (err: any) {
+      setErrorMessage('Gagal memproses logo: ' + (err.message || 'File tidak dapat dibaca'));
+      setTimeout(() => setErrorMessage(''), 4000);
+    }
   };
 
   // Remove Logo with immediate save
   const handleRemoveLogo = () => {
     handleFieldChange('logoUrl', '');
+    updateAppFavicon(null);
     setShowToast(true);
-    setStatusMessage('Logo sekolah telah dihapus dan otomatis tersimpan.');
+    setStatusMessage('Logo sekolah telah dihapus dan favicon kembali ke standar.');
     setTimeout(() => setStatusMessage(''), 4000);
   };
 

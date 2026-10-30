@@ -111,7 +111,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
   ];
 
-  // Guru Menu Sections (Menu Absensi, Cetak Absen, & Cetak Rapor ALWAYS appear clearly for teachers)
+  // Guru Menu Sections: Cetak Rapor Siswa is strictly restricted to designated Wali Kelas only
   const guruMenuSections: MenuSection[] = [
     {
       title: 'Menu Pembelajaran Guru',
@@ -122,7 +122,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
-      title: 'Layanan Wali Kelas & Rapor',
+      title: assignedWali ? 'Layanan Wali Kelas & Rapor' : 'Layanan Presensi Siswa',
       items: [
         {
           id: 'guru-absensi',
@@ -138,13 +138,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
           badge: assignedWali ? `${assignedWali.kodeKelas}${assignedWali.rombel}` : 'Cetak',
           badgeColor: 'bg-purple-100 text-purple-800 font-bold',
         },
-        {
-          id: 'guru-cetak-rapor',
-          label: 'Cetak Rapor Siswa',
-          icon: FileText,
-          badge: assignedWali ? `${assignedWali.kodeKelas}${assignedWali.rombel} (PDF)` : 'PDF',
-          badgeColor: 'bg-rose-100 text-rose-800 font-bold',
-        },
+        // Cetak Rapor Siswa HANYA ditampilkan untuk Wali Kelas yang ditunjuk dan tersimpan di Admin
+        ...(assignedWali
+          ? [
+              {
+                id: 'guru-cetak-rapor',
+                label: 'Cetak Rapor Siswa',
+                icon: FileText,
+                badge: `Wali ${assignedWali.kodeKelas}${assignedWali.rombel}`,
+                badgeColor: 'bg-rose-100 text-rose-800 font-bold',
+              },
+            ]
+          : []),
       ],
     },
   ];
