@@ -28,9 +28,19 @@ export const AdminMenuWaliKelas: React.FC<AdminMenuWaliKelasProps> = ({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string>('');
 
+  // Synchronize when guruList is loaded or updated
+  React.useEffect(() => {
+    if (!selectedGuruNama && guruList.length > 0) {
+      setSelectedGuruNama(guruList[0].nama);
+    }
+  }, [guruList, selectedGuruNama]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedGuruNama) return;
+    if (!selectedGuruNama) {
+      alert('Harap pilih Nama Guru Pendidik terlebih dahulu. Pastikan data guru sudah didaftarkan pada Menu Guru.');
+      return;
+    }
 
     const matchedGuru = guruList.find((g) => g.nama === selectedGuruNama);
     const jk = matchedGuru ? matchedGuru.jenisKelamin : 'L';
@@ -171,11 +181,15 @@ export const AdminMenuWaliKelas: React.FC<AdminMenuWaliKelasProps> = ({
                 onChange={(e) => setSelectedGuruNama(e.target.value)}
                 className="flex-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:bg-white"
               >
-                {guruList.map((g) => (
-                  <option key={g.id} value={g.nama}>
-                    {g.nama} — Pengampu: {g.mapel} ({g.jenisKelamin === 'L' ? 'L' : 'P'})
-                  </option>
-                ))}
+                {guruList.length === 0 ? (
+                  <option value="">-- Belum ada data guru terdaftar --</option>
+                ) : (
+                  guruList.map((g) => (
+                    <option key={g.id} value={g.nama}>
+                      {g.nama} — Pengampu: {g.mapel} ({g.jenisKelamin === 'L' ? 'L' : 'P'})
+                    </option>
+                  ))
+                )}
               </select>
               <button
                 type="submit"

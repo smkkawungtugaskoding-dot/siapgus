@@ -35,9 +35,16 @@ import {
 import { findWaliAssignment } from '../../utils/waliKelas';
 import { ElectronicSignature } from '../common/ElectronicSignature';
 
-interface GuruMenuCetakRaporProps {
+export interface GuruMenuCetakRaporProps {
   currentUser: UserAccount;
   db: AppDatabase;
+  initialKelas?: '7' | '8' | '9';
+  initialRombel?: 'A' | 'B' | 'C' | 'D';
+  initialRaporType?: RaporType;
+  initialStudentId?: string;
+  initialShowPreviewModal?: boolean;
+  onCloseModal?: () => void;
+  isEmbedded?: boolean;
 }
 
 export type RaporType = 'sisipan' | 'semester';
@@ -45,6 +52,13 @@ export type RaporType = 'sisipan' | 'semester';
 export const GuruMenuCetakRapor: React.FC<GuruMenuCetakRaporProps> = ({
   currentUser,
   db,
+  initialKelas,
+  initialRombel,
+  initialRaporType = 'sisipan',
+  initialStudentId,
+  initialShowPreviewModal = false,
+  onCloseModal,
+  isEmbedded = false,
 }) => {
   const { profile, waliKelas, siswa, penilaian, mapelList, absensi } = db;
 
@@ -52,12 +66,12 @@ export const GuruMenuCetakRapor: React.FC<GuruMenuCetakRaporProps> = ({
   const assignedWali = findWaliAssignment(currentUser, waliKelas);
   const isAdmin = currentUser.role === 'admin';
 
-  // Default class & rombel lock to assigned Wali Kelas
-  const defaultKelas = assignedWali ? assignedWali.kodeKelas : '7';
-  const defaultRombel = assignedWali ? assignedWali.rombel : 'A';
+  // Default class & rombel lock to assigned Wali Kelas or passed prop
+  const defaultKelas = initialKelas || (assignedWali ? assignedWali.kodeKelas : '7');
+  const defaultRombel = initialRombel || (assignedWali ? assignedWali.rombel : 'A');
 
   // State: Type of Rapor (Sisipan vs Akhir Semester)
-  const [raporType, setRaporType] = useState<RaporType>('sisipan');
+  const [raporType, setRaporType] = useState<RaporType>(initialRaporType);
 
   // State: Filter and navigation
   const [filterKelas, setFilterKelas] = useState<'7' | '8' | '9'>(defaultKelas);
@@ -66,7 +80,23 @@ export const GuruMenuCetakRapor: React.FC<GuruMenuCetakRaporProps> = ({
   const [semester, setSemester] = useState<'Ganjil' | 'Genap'>('Ganjil');
 
   // State: Print preview modal
-  const [showPreviewModal, setShowPreviewModal] = useState<boolean>(false);
+  const [showPreviewModal, setShowPreviewModal] = useState<boolean>(initialShowPreviewModal);
+
+  // Sync external props when changed
+  React.useEffect(() => {
+    if (initialKelas) setFilterKelas(initialKelas);
+    if (initialRombel) setFilterRombel(initialRombel);
+  }, [initialKelas, initialRombel]);
+
+  React.useEffect(() => {
+    if (initialRaporType) setRaporType(initialRaporType);
+  }, [initialRaporType]);
+
+  React.useEffect(() => {
+    if (initialShowPreviewModal !== undefined) {
+      setShowPreviewModal(initialShowPreviewModal);
+    }
+  }, [initialShowPreviewModal]);
 
   // Custom date and city for the formal report card signature
   const defaultCity = useMemo(() => {
@@ -117,8 +147,14 @@ export const GuruMenuCetakRapor: React.FC<GuruMenuCetakRaporProps> = ({
   }, [siswa, filterKelas, filterRombel]);
 
   const [selectedStudentId, setSelectedStudentId] = useState(
-    classStudents[0]?.id || ''
+    initialStudentId || classStudents[0]?.id || ''
   );
+
+  React.useEffect(() => {
+    if (initialStudentId) {
+      setSelectedStudentId(initialStudentId);
+    }
+  }, [initialStudentId]);
 
   // Update selected student when class changes or if selected student is not in current class
   React.useEffect(() => {
@@ -1162,7 +1198,10 @@ export const GuruMenuCetakRapor: React.FC<GuruMenuCetakRaporProps> = ({
               </button>
               <button
                 type="button"
-                onClick={() => setShowPreviewModal(false)}
+                onClick={() => {
+                  setShowPreviewModal(false);
+                  onCloseModal?.();
+                }}
                 className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
@@ -1288,7 +1327,10 @@ export const GuruMenuCetakRapor: React.FC<GuruMenuCetakRaporProps> = ({
             <div className="mt-8 pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
               <button
                 type="button"
-                onClick={() => setShowPreviewModal(false)}
+                onClick={() => {
+                  setShowPreviewModal(false);
+                  onCloseModal?.();
+                }}
                 className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer"
               >
                 Tutup Preview

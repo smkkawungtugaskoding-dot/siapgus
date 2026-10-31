@@ -138,18 +138,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           badge: assignedWali ? `${assignedWali.kodeKelas}${assignedWali.rombel}` : 'Cetak',
           badgeColor: 'bg-purple-100 text-purple-800 font-bold',
         },
-        // Cetak Rapor Siswa HANYA ditampilkan untuk Wali Kelas yang ditunjuk dan tersimpan di Admin
-        ...(assignedWali
-          ? [
-              {
-                id: 'guru-cetak-rapor',
-                label: 'Cetak Rapor Siswa',
-                icon: FileText,
-                badge: `Wali ${assignedWali.kodeKelas}${assignedWali.rombel}`,
-                badgeColor: 'bg-rose-100 text-rose-800 font-bold',
-              },
-            ]
-          : []),
       ],
     },
   ];

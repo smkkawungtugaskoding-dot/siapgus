@@ -535,103 +535,60 @@ function replaceSheetData(ss, sheetName, dataArray) {
 function setupDatabase() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  // 1. Sheet Pengguna (Login)
+  // 1. Sheet Pengguna (Login) - Akun Administrator
   createSheetIfNotExists(ss, SHEET_NAMES.USERS, [
     'ID', 'Username', 'Password', 'Role', 'Nama Lengkap', 'NIK/NUPTK', 'Waktu Dibuat'
   ], [
-    ['USR-001', 'admin', '123', 'admin', 'Drs. H. Mulyadi, M.Pd. (Admin)', '197503122000031002', new Date().toISOString()],
-    ['USR-002', 'budi', '123', 'guru', 'Budi Santoso, S.Pd.', '198504122010011005', new Date().toISOString()],
-    ['USR-003', 'siti', '123', 'guru', 'Siti Aminah, M.Pd.', '198807212015022003', new Date().toISOString()]
+    ['USR-001', 'admin', '123', 'admin', 'Administrator', '', new Date().toISOString()]
   ]);
 
-  // 2. Sheet Profil Sekolah
+  // 2. Sheet Profil Sekolah (Kosong siap diisi oleh Admin)
   createSheetIfNotExists(ss, SHEET_NAMES.PROFIL, [
     'Nama Sekolah', 'Kepala Sekolah', 'NUPTK', 'NPSN', 'Akreditasi', 'Kurikulum', 'Kode Pos', 'Alamat', 'Telepon', 'Logo URL'
   ], [
-    [
-      'SMP NEGERI 1 KELUARGA TELADAN',
-      'Drs. H. Mulyadi, M.Pd.',
-      '197503122000031002',
-      '20501892',
-      'A',
-      'Kurikulum Merdeka',
-      '60234',
-      'Jl. Pendidikan Karakter No. 12, Surabaya',
-      '(031) 8439211',
-      ''
-    ]
+    ['', '', '', '', '', '', '', '', '', '']
   ]);
 
-  // 3. Sheet Siswa
+  // 3. Sheet Siswa (Kosong)
   createSheetIfNotExists(ss, SHEET_NAMES.SISWA, [
     'ID Siswa', 'Nama Siswa', 'Jenis Kelamin', 'Kelas', 'Rombel'
-  ], [
-    ['SIS-001', 'Aditya Pratama Putra', 'L', '7', 'A'],
-    ['SIS-002', 'Anindya Kirana Putri', 'P', '7', 'A'],
-    ['SIS-003', 'Bagas Satria Wibowo', 'L', '7', 'A'],
-    ['SIS-004', 'Cantika Putri Ramadhani', 'P', '7', 'A'],
-    ['SIS-005', 'Dimas Arya Yudha', 'L', '7', 'A'],
-    ['SIS-006', 'Eka Lestari Rahayu', 'P', '7', 'A'],
-    ['SIS-007', 'Fajar Nugraha', 'L', '7', 'B'],
-    ['SIS-008', 'Gita Permata Sari', 'P', '7', 'B']
-  ]);
+  ], []);
 
-  // 4. Sheet Guru
+  // 4. Sheet Guru (Kosong)
   createSheetIfNotExists(ss, SHEET_NAMES.GURU, [
     'ID Guru', 'Nama Guru', 'Jenis Kelamin', 'NIK/NUPTK', 'Guru Mata Pelajaran'
-  ], [
-    ['GUR-001', 'Budi Santoso, S.Pd.', 'L', '198504122010011005', 'Matematika'],
-    ['GUR-002', 'Siti Aminah, M.Pd.', 'P', '198807212015022003', 'Bahasa Indonesia'],
-    ['GUR-003', 'Hendra Wijaya, S.Kom.', 'L', '199201152019031008', 'Informatika'],
-    ['GUR-004', 'Dewi Lestari, S.Pd.', 'P', '199011032018012004', 'Ilmu Pengetahuan Alam (IPA)']
-  ]);
+  ], []);
 
-  // 5. Sheet Mata Pelajaran & Penugasan Guru
+  // 5. Sheet Mata Pelajaran & Penugasan Guru (Kosong)
   createSheetIfNotExists(ss, SHEET_NAMES.MAPEL, [
     'ID', 'Kode Mapel', 'Mata Pelajaran', 'Kelas', 'Rombel', 'Nama Guru', 'Jenis Kelamin', 'Tugas Tambahan'
-  ], [
-    ['GM-001', 'MTK-7', 'Matematika', '7', 'A', 'Budi Santoso, S.Pd.', 'L', 'Wali Kelas 7B'],
-    ['GM-002', 'MTK-7', 'Matematika', '7', 'B', 'Budi Santoso, S.Pd.', 'L', 'Wali Kelas 7B'],
-    ['GM-003', 'BIN-7', 'Bahasa Indonesia', '7', 'A', 'Siti Aminah, M.Pd.', 'P', 'Wali Kelas 7A'],
-    ['GM-004', 'INF-7', 'Informatika', '7', 'A', 'Hendra Wijaya, S.Kom.', 'L', 'Pembina OSIS']
-  ]);
+  ], []);
 
-  // 6. Sheet Wali Kelas
+  // 6. Sheet Wali Kelas (Kosong)
   createSheetIfNotExists(ss, SHEET_NAMES.WALI_KELAS, [
     'ID', 'Kode Kelas', 'Rombel', 'Nama Guru', 'Jenis Kelamin', 'Guru Mata Pelajaran', 'Tugas Tambahan'
-  ], [
-    ['WK-001', '7', 'A', 'Siti Aminah, M.Pd.', 'P', 'Bahasa Indonesia', 'Wali Kelas 7A'],
-    ['WK-002', '7', 'B', 'Budi Santoso, S.Pd.', 'L', 'Matematika', 'Wali Kelas 7B'],
-    ['WK-003', '8', 'A', 'Dewi Lestari, S.Pd.', 'P', 'Ilmu Pengetahuan Alam (IPA)', 'Wali Kelas 8A'],
-    ['WK-004', '9', 'A', 'Hendra Wijaya, S.Kom.', 'L', 'Informatika', 'Wali Kelas 9A']
-  ]);
+  ], []);
 
-  // 7. Sheet Jurnal Pembelajaran
+  // 7. Sheet Jurnal Pembelajaran (Kosong)
   createSheetIfNotExists(ss, SHEET_NAMES.JURNAL, [
     'ID Jurnal', 'Hari/Tanggal', 'Hari', 'Kelas', 'Jam Ke', 'Capaian Pembelajaran (CP)', 'Tujuan Pembelajaran (TP)', 'KBM', 'Refleksi Guru & Asesmen', 'Siswa Tidak Hadir', 'Nama Guru'
-  ], [
-    ['JRN-001', '2026-10-27', 'Senin', '7A', '1 - 2', 'Aljabar dan Persamaan Linier', 'Menyelesaikan persamaan linier satu variabel', 'Diskusi kelompok berbasis masalah (PBL)', 'Siswa antusias, 2 siswa perlu bimbingan', 'Aditya Pratama (Sakit)', 'Budi Santoso, S.Pd.']
-  ]);
+  ], []);
 
-  // 8. Sheet Penilaian Rapor
+  // 8. Sheet Penilaian Rapor (Kosong)
   createSheetIfNotExists(ss, SHEET_NAMES.PENILAIAN, [
     'ID Penilaian', 'ID Siswa', 'Nama Siswa', 'Kelas', 'Rombel', 'Mata Pelajaran', 'Nama Guru', 'Tahun Pelajaran', 'Semester', 'KKTP', 
     'Sumatif 1', 'Sumatif 2', 'Sumatif 3', 'STS', 'SAS', 'Nilai Sisipan', 'Capaian Sisipan', 'Nilai Akhir', 'Capaian Akhir'
-  ], [
-    ['NIL-001', 'SIS-001', 'Aditya Pratama Putra', '7', 'A', 'Matematika', 'Budi Santoso, S.Pd.', '2026/2027', 'Ganjil', 75, 85, 80, 88, 82, 86, 83, 'Menunjukkan pemahaman sangat baik aljabar', 85, 'Sangat baik menyelesaikan masalah kontekstual']
-  ]);
+  ], []);
 
-  // 9. Sheet Absensi Harian Siswa
+  // 9. Sheet Absensi Harian Siswa (Kosong)
   createSheetIfNotExists(ss, SHEET_NAMES.ABSENSI, [
     'ID Absen', 'Tanggal', 'Kelas', 'Rombel', 'ID Siswa', 'Nama Siswa', 'Status (H/S/I/A)', 'Keterangan', 'Wali Kelas'
-  ], [
-    ['ABS-001', '2026-10-27', '7', 'A', 'SIS-001', 'Aditya Pratama Putra', 'S', 'Surat dokter', 'Siti Aminah, M.Pd.']
-  ]);
+  ], []);
 
   ensureProfileLogoColumn(ss);
 
-  Logger.log('Inisialisasi 9 Sheet Database SiApgus Berhasil!');
-  return { status: 'success', message: 'Semua 9 sheet database SiApgus siap digunakan!' };
+  Logger.log('Inisialisasi 9 Sheet Database SiApgus Berhasil (Siap Input Data)!');
+  return { status: 'success', message: 'Semua 9 sheet database SiApgus siap digunakan dengan data bersih!' };
 }
 
 /**

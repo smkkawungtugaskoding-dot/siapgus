@@ -1,0 +1,51 @@
+{
+  "users": [
+    {
+      "id": "USR-001",
+      "username": "admin",
+      "password": "123",
+      "role": "admin",
+      "fullName": "Administrator",
+      "email": "admin@sekolah.sch.id",
+      "nikNuptk": "",
+      "createdAt": "2026-01-10T08:00:00Z"
+    }
+  ],
+  "profile": {
+    "namaSekolah": "",
+    "kepalaSekolah": "",
+    "nuptk": "",
+    "npsn": "",
+    "akreditasi": "",
+    "kurikulum": "",
+    "kodePos": "",
+    "alamatSekolah": "",
+    "telp": "",
+    "logoUrl": ""
+  },
+  "siswa": [],
+  "guru": [],
+  "mapelList": [],
+  "kelasList": [
+    { "id": "KLS-001", "kelas": "7", "rombel": "A" },
+    { "id": "KLS-002", "kelas": "7", "rombel": "B" },
+    { "id": "KLS-003", "kelas": "7", "rombel": "C" },
+    { "id": "KLS-004", "kelas": "7", "rombel": "D" },
+    { "id": "KLS-005", "kelas": "8", "rombel": "A" },
+    { "id": "KLS-006", "kelas": "8", "rombel": "B" },
+    { "id": "KLS-007", "kelas": "8", "rombel": "C" },
+    { "id": "KLS-008", "kelas": "8", "rombel": "D" },
+    { "id": "KLS-009", "kelas": "9", "rombel": "A" },
+    { "id": "KLS-010", "kelas": "9", "rombel": "B" },
+    { "id": "KLS-011", "kelas": "9", "rombel": "C" },
+    { "id": "KLS-012", "kelas": "9", "rombel": "D" }
+  ],
+  "guruMapel": [],
+  "waliKelas": [],
+  "jurnal": [],
+  "penilaian": [],
+  "absensi": [],
+  "sheetsWebAppUrl": "",
+  "autoSyncToSheets": true,
+  "lastSyncedToSheets": ""
+}

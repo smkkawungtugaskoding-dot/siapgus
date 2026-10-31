@@ -17,8 +17,8 @@ export interface SchoolProfile {
   kepalaSekolah: string;
   nuptk: string;
   npsn: string;
-  akreditasi: 'A' | 'B' | 'C';
-  kurikulum: 'Kurikulum Merdeka' | 'Kurikulum 2013' | 'Kurikulum Nasional';
+  akreditasi: 'A' | 'B' | 'C' | '';
+  kurikulum: 'Kurikulum Merdeka' | 'Kurikulum 2013' | 'Kurikulum Nasional' | '';
   kodePos: string;
   alamatSekolah: string;
   telp: string;
@@ -33,6 +33,8 @@ export interface Siswa {
   jenisKelamin: Gender;
   kelas: '7' | '8' | '9';
   rombel: 'A' | 'B' | 'C' | 'D';
+  nisn?: string;
+  nis?: string;
 }
 
 export interface Guru {
@@ -106,6 +108,7 @@ export interface PenilaianItem {
   sumatif3?: number | null;
   sts?: number | null;
   sas?: number | null;
+  praktek?: number | null; // Nilai Ujian Praktek (Rentang 0 - 100)
   nilaiSisipan?: number | null;
   capaianSisipan?: string;
   nilaiAkhir?: number | null;
@@ -116,6 +119,7 @@ export interface PenilaianItem {
   sumatif3Saved?: boolean;
   stsSaved?: boolean;
   sasSaved?: boolean;
+  praktekSaved?: boolean;
 }
 
 export type AbsensiStatus = 'H' | 'S' | 'I' | 'A';

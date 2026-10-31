@@ -659,11 +659,12 @@ export default function App() {
             />
           )}
 
-          {activeMenu === 'guru-penilaian' && (
+          {(activeMenu === 'guru-penilaian' || activeMenu === 'guru-cetak-rapor') && (
             <GuruRaporPenilaian
               currentUser={currentUser}
               db={db}
               onSavePenilaianBatch={handleSavePenilaianBatch}
+              initialSubTab={activeMenu === 'guru-cetak-rapor' ? 'cetak' : undefined}
             />
           )}
 
@@ -680,40 +681,6 @@ export default function App() {
               currentUser={currentUser}
               db={db}
             />
-          )}
-
-          {activeMenu === 'guru-cetak-rapor' && (
-            (() => {
-              const assignedWali = findWaliAssignment(currentUser, db.waliKelas);
-              if (currentUser.role !== 'admin' && !assignedWali) {
-                return (
-                  <div className="bg-white rounded-2xl border border-amber-200 p-8 text-center max-w-xl mx-auto space-y-4 shadow-sm my-8">
-                    <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
-                      <ShieldAlert className="w-8 h-8" />
-                    </div>
-                    <div>
-                      <h2 className="text-lg font-bold text-slate-800">Akses Khusus Wali Kelas</h2>
-                      <p className="text-xs text-slate-500 mt-1">
-                        Menu Cetak Rapor Siswa hanya dapat diakses oleh Wali Kelas yang ditunjuk dan terdaftar pada Menu Wali Kelas oleh Administrator. Anda saat ini login sebagai Guru Mata Pelajaran.
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setActiveMenu('guru-dashboard')}
-                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition cursor-pointer"
-                    >
-                      Kembali ke Dashboard Guru
-                    </button>
-                  </div>
-                );
-              }
-              return (
-                <GuruMenuCetakRapor
-                  currentUser={currentUser}
-                  db={db}
-                />
-              );
-            })()
           )}
         </main>
       </div>

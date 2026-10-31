@@ -91,125 +91,40 @@
     // ==========================================
     const DEFAULT_DATA = {
       profil: {
-        namaSekolah: 'SMP NEGERI 1 KELUARGA TELADAN',
-        kepalaSekolah: 'Drs. H. Mulyadi, M.Pd.',
-        nuptk: '197503122000031002',
-        npsn: '20501892',
-        akreditasi: 'A',
-        kurikulum: 'Kurikulum Merdeka',
-        kodePos: '60234',
-        alamatSekolah: 'Jl. Pendidikan Karakter No. 12, Surabaya',
-        telp: '(031) 8439211',
+        namaSekolah: '',
+        kepalaSekolah: '',
+        nuptk: '',
+        npsn: '',
+        akreditasi: '',
+        kurikulum: '',
+        kodePos: '',
+        alamatSekolah: '',
+        telp: '',
         logoUrl: ''
       },
       users: [
-        { id: 'USR-001', username: 'admin', password: '123', role: 'admin', fullName: 'Drs. H. Mulyadi, M.Pd. (Admin)', email: 'admin@sekolah.sch.id', nikNuptk: '197503122000031002' },
-        { id: 'USR-002', username: 'budi', password: '123', role: 'guru', fullName: 'Budi Santoso, S.Pd.', email: 'budi.santoso@sekolah.sch.id', nikNuptk: '198504122010011005', assignedTeacherId: 'GUR-001' },
-        { id: 'USR-003', username: 'siti', password: '123', role: 'guru', fullName: 'Siti Aminah, M.Pd.', email: 'siti.aminah@sekolah.sch.id', nikNuptk: '198807212015022003', assignedTeacherId: 'GUR-002' }
+        { id: 'USR-001', username: 'admin', password: '123', role: 'admin', fullName: 'Administrator', email: 'admin@sekolah.sch.id', nikNuptk: '' }
       ],
-      siswa: [
-        { id: 'SIS-001', nama: 'Aditya Pratama Putra', jenisKelamin: 'L', kelas: '7', rombel: 'A' },
-        { id: 'SIS-002', nama: 'Anindya Kirana Putri', jenisKelamin: 'P', kelas: '7', rombel: 'A' },
-        { id: 'SIS-003', nama: 'Bagas Satria Wibowo', jenisKelamin: 'L', kelas: '7', rombel: 'A' },
-        { id: 'SIS-004', nama: 'Cantika Putri Ramadhani', jenisKelamin: 'P', kelas: '7', rombel: 'A' },
-        { id: 'SIS-005', nama: 'Dimas Arya Yudha', jenisKelamin: 'L', kelas: '7', rombel: 'A' },
-        { id: 'SIS-006', nama: 'Eka Lestari Rahayu', jenisKelamin: 'P', kelas: '7', rombel: 'A' },
-        { id: 'SIS-007', nama: 'Fajar Nugraha', jenisKelamin: 'L', kelas: '7', rombel: 'B' },
-        { id: 'SIS-008', nama: 'Gita Permata Sari', jenisKelamin: 'P', kelas: '7', rombel: 'B' },
-        { id: 'SIS-009', nama: 'Hafiz Syahputra', jenisKelamin: 'L', kelas: '7', rombel: 'B' }
-      ],
-      guru: [
-        { id: 'GUR-001', nama: 'Budi Santoso, S.Pd.', jenisKelamin: 'L', mapel: 'Matematika', nikNuptk: '198504122010011005' },
-        { id: 'GUR-002', nama: 'Siti Aminah, M.Pd.', jenisKelamin: 'P', mapel: 'Bahasa Indonesia', nikNuptk: '198807212015022003' },
-        { id: 'GUR-003', nama: 'Hendra Wijaya, S.Kom.', jenisKelamin: 'L', mapel: 'Informatika', nikNuptk: '199201152019031008' },
-        { id: 'GUR-004', nama: 'Dewi Lestari, S.Pd.', jenisKelamin: 'P', mapel: 'Ilmu Pengetahuan Alam (IPA)', nikNuptk: '199011032018012004' }
-      ],
-      mapel: [
-        { id: 'GM-001', kodeMapel: 'MTK-7', mataPelajaran: 'Matematika', kelas: '7', rombel: 'A', namaGuru: 'Budi Santoso, S.Pd.', jenisKelamin: 'L', tugasTambahan: 'Wali Kelas 7B' },
-        { id: 'GM-002', kodeMapel: 'MTK-7', mataPelajaran: 'Matematika', kelas: '7', rombel: 'B', namaGuru: 'Budi Santoso, S.Pd.', jenisKelamin: 'L', tugasTambahan: 'Wali Kelas 7B' },
-        { id: 'GM-003', kodeMapel: 'BIN-7', mataPelajaran: 'Bahasa Indonesia', kelas: '7', rombel: 'A', namaGuru: 'Siti Aminah, M.Pd.', jenisKelamin: 'P', tugasTambahan: 'Wali Kelas 7A' },
-        { id: 'GM-004', kodeMapel: 'INF-7', mataPelajaran: 'Informatika', kelas: '7', rombel: 'A', namaGuru: 'Hendra Wijaya, S.Kom.', jenisKelamin: 'L', tugasTambahan: 'Pembina OSIS' }
-      ],
-      waliKelas: [
-        { id: 'WK-001', kodeKelas: '7', rombel: 'A', namaGuru: 'Siti Aminah, M.Pd.', jenisKelamin: 'P', guruMataPelajaran: 'Bahasa Indonesia', tugasTambahan: 'Wali Kelas 7A' },
-        { id: 'WK-002', kodeKelas: '7', rombel: 'B', namaGuru: 'Budi Santoso, S.Pd.', jenisKelamin: 'L', guruMataPelajaran: 'Matematika', tugasTambahan: 'Wali Kelas 7B' }
-      ],
-      jurnal: [
-        {
-          id: 'JRN-001',
-          tanggal: '2026-10-27',
-          hari: 'Senin',
-          kelas: '7A',
-          jamKe: '1 - 2',
-          capaianPembelajaran: 'Peserta didik mampu memahami konsep aljabar dan persamaan linier satu variabel.',
-          tujuanPembelajaran: 'Menyelesaikan permasalahan kontekstual menggunakan aljabar sederhana.',
-          kbm: 'Diskusi kelompok berbasis masalah (PBL) dan presentasi lembar kerja.',
-          refleksi: 'Siswa sangat aktif bertanya, 2 siswa perlu pendampingan tambahan.',
-          asesmen: 'Penilaian formatif kuis kelompok.',
-          siswaTidakHadir: 'Aditya Pratama Putra (Sakit)',
-          namaGuru: 'Budi Santoso, S.Pd.'
-        }
-      ],
-      penilaian: [
-        {
-          id: 'NIL-001',
-          siswaId: 'SIS-001',
-          namaSiswa: 'Aditya Pratama Putra',
-          kelas: '7',
-          rombel: 'A',
-          mapel: 'Matematika',
-          pengajar: 'Budi Santoso, S.Pd.',
-          tahunPelajaran: '2026/2027',
-          semester: 'Ganjil',
-          kktp: 75,
-          sumatif1: 85,
-          sumatif2: 80,
-          sumatif3: 88,
-          sts: 82,
-          sas: 86,
-          nilaiSisipan: 83,
-          capaianSisipan: 'Menunjukkan pemahaman yang sangat baik dalam memahami konsep aljabar dan relasi fungsi.',
-          nilaiAkhir: 85,
-          capaianAkhir: 'Sangat baik dalam menyelesaikan masalah kontekstual aljabar dan geometri bidang.'
-        },
-        {
-          id: 'NIL-002',
-          siswaId: 'SIS-002',
-          namaSiswa: 'Anindya Kirana Putri',
-          kelas: '7',
-          rombel: 'A',
-          mapel: 'Matematika',
-          pengajar: 'Budi Santoso, S.Pd.',
-          tahunPelajaran: '2026/2027',
-          semester: 'Ganjil',
-          kktp: 75,
-          sumatif1: 90,
-          sumatif2: 92,
-          sumatif3: 94,
-          sts: 91,
-          sas: 95,
-          nilaiSisipan: 92,
-          capaianSisipan: 'Menunjukkan penguasaan sangat tinggi dalam aljabar dan penalaran logis.',
-          nilaiAkhir: 93,
-          capaianAkhir: 'Istimewa dan tuntas mandiri dalam menyelesaikan persoalan matematis tingkat lanjut.'
-        }
-      ],
-      absensi: [
-        { id: 'ABS-001', tanggal: '2026-10-27', kelas: '7', rombel: 'A', siswaId: 'SIS-001', namaSiswa: 'Aditya Pratama Putra', status: 'S', keterangan: 'Surat dokter terlampir', waliKelas: 'Siti Aminah, M.Pd.' }
-      ]
+      siswa: [],
+      guru: [],
+      mapel: [],
+      waliKelas: [],
+      jurnal: [],
+      penilaian: [],
+      absensi: []
     };
 
     // ==========================================
     // 2. STATE MANAGER
     // ==========================================
-    const STORAGE_KEY = 'siapgus_gas_db_v1';
+    const STORAGE_KEY = 'siapgus_gas_db_v2';
     let db = loadDatabase();
     let currentUser = null;
     let activeTab = 'login';
     let filterKelas = '7';
     let filterRombel = 'A';
-    let filterMapel = 'Matematika';
-    let selectedSiswaId = 'SIS-001';
+    let filterMapel = '';
+    let selectedSiswaId = '';
     let raporMode = 'sisipan'; // 'sisipan' atau 'akhir'
     let showPreviewModalRapor = false;
     let isGasEnvironment = typeof google !== 'undefined' && google.script && google.script.run;
@@ -1409,10 +1324,11 @@
             <div>
               <label class="font-bold text-slate-700 mr-2">Mata Pelajaran:</label>
               <select onchange="changeFilterMapel(this.value)" class="px-3 py-1.5 rounded-lg border border-slate-300 font-semibold">
-                <option value="Matematika" ${filterMapel === 'Matematika' ? 'selected' : ''}>Matematika</option>
-                <option value="Bahasa Indonesia" ${filterMapel === 'Bahasa Indonesia' ? 'selected' : ''}>Bahasa Indonesia</option>
-                <option value="Informatika" ${filterMapel === 'Informatika' ? 'selected' : ''}>Informatika</option>
-                <option value="Ilmu Pengetahuan Alam (IPA)" ${filterMapel.includes('IPA') ? 'selected' : ''}>Ilmu Pengetahuan Alam (IPA)</option>
+                <option value="" ${!filterMapel ? 'selected' : ''}>-- Pilih Mapel --</option>
+                ${(db.mapel && db.mapel.length > 0)
+                  ? Array.from(new Set(db.mapel.map(m => m.mataPelajaran || m.pelajaran).filter(Boolean))).map(m => `<option value="${m}" ${filterMapel === m ? 'selected' : ''}>${m}</option>`).join('')
+                  : '<option value="Matematika">Matematika</option><option value="Bahasa Indonesia">Bahasa Indonesia</option>'
+                }
               </select>
             </div>
 

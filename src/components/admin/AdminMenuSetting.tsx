@@ -197,6 +197,9 @@ export const AdminMenuSetting: React.FC<AdminMenuSettingProps> = ({
         nuptk: formData.nuptk.trim(),
       });
 
+      // Segera perbarui favicon tab browser dengan logo sekolah yang tersimpan
+      updateAppFavicon(formData.logoUrl);
+
       if (onUpdateSheetsUrl) {
         onUpdateSheetsUrl(webAppUrl.trim());
       }

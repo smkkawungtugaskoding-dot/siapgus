@@ -44,7 +44,7 @@ export {
   createInitialDatabase
 };
 
-const STORAGE_KEY = 'siapgus_school_db_v1';
+const STORAGE_KEY = 'siapgus_school_db_v2';
 
 export function getDatabase(): AppDatabase {
   try {
@@ -53,23 +53,17 @@ export function getDatabase(): AppDatabase {
       const parsed = JSON.parse(raw);
       // Ensure all arrays and profile exist
       return {
-        users: (parsed.users || INITIAL_USERS).map((u: UserAccount, idx: number) => ({
-          ...u,
-          nikNuptk: u.nikNuptk || INITIAL_USERS.find(iu => iu.id === u.id)?.nikNuptk || ''
-        })),
+        users: Array.isArray(parsed.users) ? parsed.users : INITIAL_USERS,
         profile: { ...DEFAULT_PROFILE, ...(parsed.profile || {}) },
-        siswa: parsed.siswa || INITIAL_SISWA,
-        guru: (parsed.guru || INITIAL_GURU).map((g: Guru, idx: number) => ({
-          ...g,
-          nikNuptk: g.nikNuptk || INITIAL_GURU.find(ig => ig.id === g.id)?.nikNuptk || ''
-        })),
-        mapelList: parsed.mapelList || INITIAL_MAPEL_LIST,
-        kelasList: parsed.kelasList || INITIAL_KELAS_LIST,
-        guruMapel: parsed.guruMapel || INITIAL_GURU_MAPEL,
-        waliKelas: parsed.waliKelas || INITIAL_WALI_KELAS,
-        jurnal: parsed.jurnal || INITIAL_JURNAL,
-        penilaian: parsed.penilaian || INITIAL_PENILAIAN,
-        absensi: parsed.absensi && parsed.absensi.length > 6 ? parsed.absensi : INITIAL_ABSENSI,
+        siswa: Array.isArray(parsed.siswa) ? parsed.siswa : INITIAL_SISWA,
+        guru: Array.isArray(parsed.guru) ? parsed.guru : INITIAL_GURU,
+        mapelList: Array.isArray(parsed.mapelList) ? parsed.mapelList : INITIAL_MAPEL_LIST,
+        kelasList: Array.isArray(parsed.kelasList) ? parsed.kelasList : INITIAL_KELAS_LIST,
+        guruMapel: Array.isArray(parsed.guruMapel) ? parsed.guruMapel : INITIAL_GURU_MAPEL,
+        waliKelas: Array.isArray(parsed.waliKelas) ? parsed.waliKelas : INITIAL_WALI_KELAS,
+        jurnal: Array.isArray(parsed.jurnal) ? parsed.jurnal : INITIAL_JURNAL,
+        penilaian: Array.isArray(parsed.penilaian) ? parsed.penilaian : INITIAL_PENILAIAN,
+        absensi: Array.isArray(parsed.absensi) ? parsed.absensi : INITIAL_ABSENSI,
         sheetsWebAppUrl: parsed.sheetsWebAppUrl || '',
         autoSyncToSheets: parsed.autoSyncToSheets !== undefined ? parsed.autoSyncToSheets : true,
         lastSyncedToSheets: parsed.lastSyncedToSheets || ''

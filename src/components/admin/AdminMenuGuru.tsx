@@ -37,7 +37,14 @@ export const AdminMenuGuru: React.FC<AdminMenuGuruProps> = ({
   const [nama, setNama] = useState('');
   const [nikNuptk, setNikNuptk] = useState('');
   const [jenisKelamin, setJenisKelamin] = useState<Gender>('L');
-  const [mapel, setMapel] = useState(mapelOptions[0] || 'Matematika');
+  const [mapel, setMapel] = useState(mapelOptions[0] || '');
+
+  // Sync mapel when mapelOptions change
+  React.useEffect(() => {
+    if (!mapel && mapelOptions.length > 0) {
+      setMapel(mapelOptions[0]);
+    }
+  }, [mapelOptions]);
 
   // Editing state
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -51,7 +58,7 @@ export const AdminMenuGuru: React.FC<AdminMenuGuruProps> = ({
     setNama('');
     setNikNuptk('');
     setJenisKelamin('L');
-    setMapel(mapelOptions[0] || 'Matematika');
+    setMapel(mapelOptions[0] || '');
     setEditingId(null);
   };
 

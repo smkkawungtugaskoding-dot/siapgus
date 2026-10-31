@@ -62,6 +62,19 @@ export const AdminMenuGuruMapel: React.FC<AdminMenuGuruMapelProps> = ({
   const [selectedTargetRombel, setSelectedTargetRombel] = useState<'A' | 'B' | 'C' | 'D'>('A');
   const [tugasTambahan, setTugasTambahan] = useState('Guru Mapel');
 
+  // Synchronize when guruList or mapelList are loaded or updated
+  React.useEffect(() => {
+    if (!selectedGuruName && guruList.length > 0) {
+      setSelectedGuruName(guruList[0].nama);
+    }
+  }, [guruList, selectedGuruName]);
+
+  React.useEffect(() => {
+    if (!selectedMapel && mapelList.length > 0) {
+      setSelectedMapel(mapelList[0].pelajaran);
+    }
+  }, [mapelList, selectedMapel]);
+
   // Editing state for table row
   const [editingAssignmentId, setEditingAssignmentId] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string>('');
@@ -103,6 +116,10 @@ export const AdminMenuGuruMapel: React.FC<AdminMenuGuruMapelProps> = ({
   // Handle Assignment Add or Update
   const handleAssignmentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedGuruName || !selectedMapel) {
+      alert('Harap pilih Nama Guru dan Mata Pelajaran terlebih dahulu. Pastikan data guru dan mata pelajaran sudah didaftarkan.');
+      return;
+    }
     const matchedGuru = guruList.find((g) => g.nama === selectedGuruName);
     const jk: Gender = matchedGuru ? matchedGuru.jenisKelamin : 'L';
 
@@ -365,11 +382,15 @@ export const AdminMenuGuruMapel: React.FC<AdminMenuGuruMapelProps> = ({
               onChange={(e) => setSelectedGuruName(e.target.value)}
               className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-purple-500 focus:bg-white font-medium"
             >
-              {guruList.map((g) => (
-                <option key={g.id} value={g.nama}>
-                  {g.nama} ({g.jenisKelamin === 'L' ? 'L' : 'P'})
-                </option>
-              ))}
+              {guruList.length === 0 ? (
+                <option value="">-- Belum ada data guru terdaftar --</option>
+              ) : (
+                guruList.map((g) => (
+                  <option key={g.id} value={g.nama}>
+                    {g.nama} ({g.jenisKelamin === 'L' ? 'L' : 'P'})
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
@@ -383,11 +404,15 @@ export const AdminMenuGuruMapel: React.FC<AdminMenuGuruMapelProps> = ({
               onChange={(e) => setSelectedMapel(e.target.value)}
               className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-purple-500 focus:bg-white font-medium"
             >
-              {mapelList.map((m) => (
-                <option key={m.id} value={m.pelajaran}>
-                  [{m.kodeMapel}] {m.pelajaran}
-                </option>
-              ))}
+              {mapelList.length === 0 ? (
+                <option value="">-- Belum ada mata pelajaran terdaftar --</option>
+              ) : (
+                mapelList.map((m) => (
+                  <option key={m.id} value={m.pelajaran}>
+                    [{m.kodeMapel}] {m.pelajaran}
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
